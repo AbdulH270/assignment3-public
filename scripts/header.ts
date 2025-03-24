@@ -11,6 +11,7 @@ export async function LoadHeader() {
             } else {
                 console.error("[ERROR] Failed to locate header in the DOM.");
             }
+
         })
         .catch(error => console.log("[ERROR] Unable to load header", error));
 
@@ -35,13 +36,4 @@ export function updateActiveNavLink() {
     });
 }
 
-export function handleLogout(event:Event) {
-    event.preventDefault();
-    sessionStorage.removeItem("user");
-    console.log("[INFO] User logged out. Updating UI...");
 
-    LoadHeader().then( () => {
-        location.hash = "/";
-    });
-
-}

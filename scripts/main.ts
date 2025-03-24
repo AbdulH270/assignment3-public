@@ -8,7 +8,7 @@ Date of Completion: 02-24-2025
 
 import {Router} from "./router.js";
 import {LoadFooter} from "./footer.js";
-import {LoadHeader} from "./header.js";
+import {LoadHeader, updateActiveNavLink} from "./header.js";
 
 const pageTitles: Record<string, string> = {
     "/": "Home",
@@ -423,6 +423,22 @@ interface jQuery {
         console.log("Called PrivacyPolicyPage()...");
     }
 
+    document.addEventListener("routeLoaded", (event) => {
+
+        if(!(event instanceof CustomEvent) || typeof event.detail !== "string") {
+            console.warn("[WARNING] Received an invalid 'routeLoaded' event.");
+            return;
+        }
+
+        const newPath:string = event.detail;
+        console.log(`[INFO] New Route Loaded: ${newPath}`);
+
+        LoadHeader().then(() => {
+            pageLogic(newPath);
+        })
+
+    });
+
 
     function pageLogic(path:string){
             document.title = pageTitles[path] || "Untitled Page";
@@ -461,7 +477,7 @@ interface jQuery {
         }
     }
 
-    async function Start(): Promise<void> {
+    async function Start() {
         console.log("Starting...");
         await LoadHeader();
         await LoadFooter();
